@@ -30,7 +30,7 @@ pushd "$TMP_WORKSPACE"
     pushd "$TMP_WORKSPACE"/package
       npm install \
       && npm test \
-      && nom run-script lint
+      && npm run-script lint
     popd >& /dev/null
   )
 popd >& /dev/null
