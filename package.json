@@ -1,15 +1,17 @@
 {
-  "name": "mintable",
+  "name": "node-sec-patterns",
   "description": "Allow projects control over which dependencies can create objects that encapsulate security guarantees.",
   "version": "1.0.0",
   "keywords": [
+    "design-patterns",
     "security",
-    "mintable",
+    "suspicious",
     "whitelist",
     "sec-roadmap"
   ],
-  "main": "lib/mintable.js",
+  "main": "index.js",
   "files": [
+    "index.js",
     "lib/mintable.js"
   ],
   "dependencies": {},
@@ -21,10 +23,10 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mikesamuel/mintable.git"
+    "url": "git+https://github.com/mikesamuel/node-sec-patterns.git"
   },
   "bugs": {
-    "url": "https://github.com/mikesamuel/mintable/issues"
+    "url": "https://github.com/mikesamuel/node-sec-patterns/issues"
   },
   "devDependencies": {
     "chai": ">=4.1.2",
