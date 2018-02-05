@@ -61,7 +61,7 @@ via a `"mintable"` propery in your `package.json` like the below:
 ```json
 {
   "name": "my-project",
-  ...
+  "...": "...",
   "mintable": {
     "mode": "enforce",
     "grants": {
