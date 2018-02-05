@@ -2,7 +2,7 @@
   "mintable": {
     "mode": "enforce",
     "grants": {
-      "CK": ["test/cases/simple-true-positive/index.js"]
+      "CK": ["./index.js"]
     }
   }
 }

@@ -2,7 +2,7 @@
   "mintable": {
     "mode": "enforce",
     "grants": {
-      "MY": ["test/cases/delete-from-module-cache-and-reinitialize/index.js"]
+      "MY": ["./index.js"]
     }
   }
 }

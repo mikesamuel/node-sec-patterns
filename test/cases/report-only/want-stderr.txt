@@ -1,1 +1,1 @@
-mintable: test/cases/report-only/index.js not allowed to mint DENIED
+mintable: ./index.js not allowed to mint DENIED

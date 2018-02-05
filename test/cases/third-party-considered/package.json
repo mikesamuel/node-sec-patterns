@@ -1,0 +1,11 @@
+{
+  "mintable": {
+    "grants": {
+      "MY": [
+        "@scoped/reviewed",
+        "unscoped-reviewed",
+        "./index.js"
+      ]
+    }
+  }
+}

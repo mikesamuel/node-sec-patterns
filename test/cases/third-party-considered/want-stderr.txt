@@ -1,0 +1,2 @@
+mintable: @scoped/unreviewed not allowed to mint MY
+mintable: unscoped-unreviewed not allowed to mint MY

@@ -1,0 +1,10 @@
+In @scoped/reviewed
+pass
+In @scoped/unreviewed
+mintable: @scoped/unreviewed not allowed to mint MY
+In unscoped-reviewed
+pass
+In unscoped-unreviewed
+mintable: unscoped-unreviewed not allowed to mint MY
+In ./index
+pass

@@ -1,3 +1,7 @@
 {
-  "grants": ["test/case/naive-forgery/index.js"]
+  "mintable": {
+    "grants": {
+      "CK": ["./index.js"]
+    }
+  }
 }
