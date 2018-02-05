@@ -1,0 +1,11 @@
+Got minter
+Minted true
+Verified true
+Trying new
+(new MyMintable) failed with Error: Construct instances via MyMintable.mint(...), not via new MyMintable
+Verified new false
+Trying MyMintable
+(MyMintable) failed with TypeError: Class constructor MyMintable cannot be invoked without 'new'
+Verified constructed false
+Trying Object.create
+Verified created false

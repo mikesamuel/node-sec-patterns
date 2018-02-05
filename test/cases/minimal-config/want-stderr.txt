@@ -1,0 +1,2 @@
+mintable: test/cases/minimal-config/index.js not allowed to mint DENIED
+mintable: test/cases/minimal-config/index.js not allowed to mint DENIED

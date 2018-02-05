@@ -1,0 +1,2 @@
+mintable: test/cases/simple-true-negative/index.js not allowed to mint DENIED
+mintable: test/cases/simple-true-negative/index.js not allowed to mint DENIED

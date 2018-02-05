@@ -1,0 +1,5 @@
+dodgy-code: Minted My false
+dodgy-code: Verified My false
+index: Got My minter
+index: Minted My true
+index: Verified My true

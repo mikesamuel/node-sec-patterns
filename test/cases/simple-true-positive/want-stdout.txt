@@ -1,0 +1,3 @@
+Got minter
+Minted true
+Verified true

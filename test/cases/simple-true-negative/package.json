@@ -1,0 +1,9 @@
+{
+  "mintable": {
+    "mode": "enforce",
+    "grants": {
+      "OK": ["test/cases/simple-true-negative/index.js"],
+      "DENIED": []
+    }
+  }
+}

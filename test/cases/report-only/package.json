@@ -1,0 +1,8 @@
+{
+  "mintable": {
+    "mode": "report-only",
+    "grants": {
+      "OK": ["test/cases/report-only/index.js"]
+    }
+  }
+}

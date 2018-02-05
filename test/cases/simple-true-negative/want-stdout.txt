@@ -1,0 +1,5 @@
+Got Ok minter
+Minted Ok true
+Verified Ok true
+Minted Denied false
+Verified Denied false

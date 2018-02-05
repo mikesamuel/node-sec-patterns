@@ -1,0 +1,1 @@
+mintable: test/cases/report-only/index.js not allowed to mint DENIED
