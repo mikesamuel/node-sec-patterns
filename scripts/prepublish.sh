@@ -54,5 +54,5 @@ $ npm publish --otp "$OTP"
 
 
 3. Push the release label to GitHub.
-$ git push origin master
+$ git push --tags origin master
 '
