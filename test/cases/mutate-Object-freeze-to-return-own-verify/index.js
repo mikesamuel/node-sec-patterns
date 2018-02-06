@@ -21,5 +21,5 @@ temporarilyReplace(
     }
 
     const verified = Mintable.verifierFor(MyMintable)(null)
-    console.log('Verified=' + verified)
+    console.log(`Verified=${verified}`)
   })

@@ -14,4 +14,4 @@ try {
 
 const forgery = Object.create(MyMintable)
 
-console.log('verified forgery ' + Mintable.verifierFor(MyMintable)(forgery))
+console.log(`verified forgery ${Mintable.verifierFor(MyMintable)(forgery)}`)
