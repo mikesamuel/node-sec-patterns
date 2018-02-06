@@ -3,6 +3,10 @@
 This project provides an NPM module that enables a variety of security
 design patterns in Node.js code.
 
+[![Build Status](https://travis-ci.org/mikesamuel/node-sec-patterns.svg?branch=master)](https://travis-ci.org/mikesamuel/node-sec-patterns)
+[![Dependencies Status](https://david-dm.org/mikesamuel/node-sec-patterns/status.svg)](https://david-dm.org/mikesamuel/node-sec-patterns)
+[![npm](https://img.shields.io/npm/v/node-sec-patterns.svg)](https://www.npmjs.com/package/node-sec-patterns)
+
 ## Goal
 Make it easier for project teams to produce code that preserves
 important security properties.
