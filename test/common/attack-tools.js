@@ -11,6 +11,7 @@
 function temporarilyReplace (obj, key, replacement, action) {
   console.log(`Monkeypatching ${key}`)
   const original = obj[key]
+  const originallyHad = Object.hasOwnProperty.call(obj, key)
   try {
     obj[key] = replacement
   } catch (exc) {
@@ -21,7 +22,11 @@ function temporarilyReplace (obj, key, replacement, action) {
   } finally {
     console.log(`Monkeyunpatching ${key}`)
     try {
-      obj[key] = original
+      if (originallyHad) {
+        obj[key] = original
+      } else {
+        delete obj[key]
+      }
     } catch (exc) {
       console.log(`Monkey unpatch failed: ${exc.toString()}`)
     }
