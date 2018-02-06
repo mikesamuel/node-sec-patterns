@@ -6,36 +6,26 @@ Monkeypatching getPrototypeOf
 Monkeypatching freeze
 Monkeypatching WeakSet
 Monkeypatching apply
-Monkeypatch failed: TypeError: Cannot assign to read only property 'apply' of function 'function () { [native code] }'
 Monkeypatching call
-Monkeypatch failed: TypeError: Cannot assign to read only property 'call' of function 'function () { [native code] }'
 Monkeypatching indexOf
 Monkeypatching map
 Monkeypatching forEach
 Monkeypatching exec
-Monkeypatch failed: TypeError: Cannot assign to read only property 'exec' of object '[object Object]'
 Monkeypatching replace
-Monkeypatch failed: TypeError: Cannot assign to read only property 'replace' of object '[object String]'
 Monkeypatching split
-Monkeypatch failed: TypeError: Cannot assign to read only property 'split' of object '[object String]'
 Monkeypatching has
 Monkeypatching add
 Denied My minter
 Monkeyunpatching add
 Monkeyunpatching has
 Monkeyunpatching split
-Monkey unpatch failed: TypeError: Cannot assign to read only property 'split' of object '[object String]'
 Monkeyunpatching replace
-Monkey unpatch failed: TypeError: Cannot assign to read only property 'replace' of object '[object String]'
 Monkeyunpatching exec
-Monkey unpatch failed: TypeError: Cannot assign to read only property 'exec' of object '[object Object]'
 Monkeyunpatching forEach
 Monkeyunpatching map
 Monkeyunpatching indexOf
 Monkeyunpatching call
-Monkey unpatch failed: TypeError: Cannot assign to read only property 'call' of function 'function () { [native code] }'
 Monkeyunpatching apply
-Monkey unpatch failed: TypeError: Cannot assign to read only property 'apply' of function 'function () { [native code] }'
 Monkeyunpatching WeakSet
 Monkeyunpatching freeze
 Monkeyunpatching getPrototypeOf

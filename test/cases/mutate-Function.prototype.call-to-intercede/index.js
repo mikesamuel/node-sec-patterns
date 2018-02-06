@@ -1,3 +1,5 @@
+/* eslint array-element-newline: "off" */
+
 const { Mintable, authorize } = require('../../../index')
 const { MyMintable } = require('../../common/my-mintable')
 const { temporarilyReplace } = require('../../common/attack-tools')
@@ -6,24 +8,22 @@ authorize(require('./package.json'))
 
 let intercepted = false
 
-function gotcha (key) {
+function gotcha (obj, key) {
   return () => {
-    console.error(`Intercepted call on ${this}.${key}`)
+    console.error(`Intercepted call on ${obj}.${key}`)
     console.trace()
     intercepted = true
   }
 }
 
 // Just test that nothing happens where we could intercept.
-function replaceAll(replacements, index, action) {
-  let i = index || 0
-  if (i < replacements.length) {
-    const obj = replacements[i]
-    const key = replacements[i + 1]
+function replaceAll (replacements, index, action) {
+  if (index < replacements.length) {
+    const [ obj, key ] = replacements[index]
     temporarilyReplace(
-      obj, key, gotcha(key),
+      obj, key, gotcha(obj, key),
       () => {
-        replaceAll(replacements, index + 2, action)
+        replaceAll(replacements, index + 1, action)
       })
   } else {
     action()
@@ -32,23 +32,23 @@ function replaceAll(replacements, index, action) {
 
 replaceAll(
   [
-    Array, 'isArray',
-    Object, 'create',
-    Object, 'defineProperties',
-    Object, 'defineProperty',
-    Object, 'getPrototypeOf',
-    Object, 'freeze',
-    global, 'WeakSet',
-    Function.prototype, 'apply',
-    Function.prototype, 'call',
-    Array.prototype, 'indexOf',
-    Array.prototype, 'map',
-    Array.prototype, 'forEach',
-    RegExp.prototype, 'exec',
-    String.prototype, 'replace',
-    String.prototype, 'split',
-    WeakSet.prototype, 'has',
-    WeakSet.prototype, 'add'
+    [ Array, 'isArray' ],
+    [ Object, 'create' ],
+    [ Object, 'defineProperties' ],
+    [ Object, 'defineProperty' ],
+    [ Object, 'getPrototypeOf' ],
+    [ Object, 'freeze' ],
+    [ global, 'WeakSet' ],
+    [ Function.prototype, 'apply' ],
+    [ Function.prototype, 'call' ],
+    [ Array.prototype, 'indexOf' ],
+    [ Array.prototype, 'map' ],
+    [ Array.prototype, 'forEach' ],
+    [ RegExp.prototype, 'exec' ],
+    [ String.prototype, 'replace' ],
+    [ String.prototype, 'split' ],
+    [ WeakSet.prototype, 'has' ],
+    [ WeakSet.prototype, 'add' ]
   ],
   0,
   () => {

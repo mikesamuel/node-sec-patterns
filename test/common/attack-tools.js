@@ -14,8 +14,9 @@ function temporarilyReplace (obj, key, replacement, action) {
   const originallyHad = Object.hasOwnProperty.call(obj, key)
   try {
     obj[key] = replacement
-  } catch (exc) {
-    console.log(`Monkeypatch failed: ${exc.toString()}`)
+  } catch (ignored) {
+    // Reporting the error can help diagnosis but makes the log output
+    // differ on different Node versions.
   }
   try {
     return action()
@@ -27,8 +28,9 @@ function temporarilyReplace (obj, key, replacement, action) {
       } else {
         delete obj[key]
       }
-    } catch (exc) {
-      console.log(`Monkey unpatch failed: ${exc.toString()}`)
+    } catch (ignored) {
+      // Reporting the error can help diagnosis but makes the log output
+      // differ on different Node versions.
     }
   }
 }
