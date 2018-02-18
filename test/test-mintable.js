@@ -40,7 +40,10 @@ describe('mintable', () => {
       return
     }
 
-    it(caseName, () => {
+    it(caseName, function testCase () {
+      // Since we touch the filesystem, these tests take a tad longer.
+      // eslint-disable-next-line no-invalid-this, no-magic-numbers, no-inline-comments, line-comment-position
+      this.slow(250) // ms
       // eslint-disable-next-line id-blacklist
       const { stdout, stderr, status, signal, error } =
         childProcess.spawnSync(
