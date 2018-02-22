@@ -1,0 +1,2 @@
+mintable: ./bypass.js not allowed to mint MY
+mintable: ./bypass.js not allowed to mint MY

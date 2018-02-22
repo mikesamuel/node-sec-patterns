@@ -1,0 +1,8 @@
+{
+  "mintable": {
+    "mode": "enforce",
+    "grants": {
+      "MY": ["./index.js"]
+    }
+  }
+}
