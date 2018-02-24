@@ -15,6 +15,11 @@ This module attempts to further that goal by enabling and encouraging
 development practices that make it transparent what code has to
 function correctly for a security property hold.
 
+## Known Issues
+
+There is a known bypass (see Travis build failure).
+Hopefully, [per module keys][] will address this.
+
 ## Glossary
 
 *  **Mutual Suspicion** - Two modules are mutually suspicious when
@@ -210,3 +215,4 @@ This module provides a mechanism by which:
    over time needs to track `package.json` and the main file.
 
 [safe contract types]: https://github.com/google/safe-html-types/blob/master/doc/safehtml-types.md#types
+[per module keys]: https://gist.github.com/mikesamuel/bd653e9f69595f7b9d7dd4381a154e02
