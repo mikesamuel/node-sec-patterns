@@ -9,4 +9,5 @@ node_js:
 # Use faster Docker architecture on Travis.
 sudo: false
 
-script: npm test && npm run-script lint
+script:        npm run-script lint && npm test
+after_success: npm run coveralls
