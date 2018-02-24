@@ -16,8 +16,10 @@
   ],
   "dependencies": {},
   "scripts": {
-    "test": "./node_modules/.bin/mocha",
-    "lint": "./node_modules/.bin/standard && ./node_modules/.bin/eslint ."
+    "cover": "istanbul cover _mocha",
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+    "lint": "./node_modules/.bin/standard && ./node_modules/.bin/eslint .",
+    "test": "mocha"
   },
   "author": "@mikesamuel",
   "license": "Apache-2.0",
