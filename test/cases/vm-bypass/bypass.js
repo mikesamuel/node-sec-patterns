@@ -1,5 +1,5 @@
 const path = require('path')
-const vm = require('vm')
+const vm = require('vm') // eslint-disable-line id-length
 
 const { Mintable } = require('../../../index')
 const { MyMintable } = require('../../common/my-mintable')
@@ -30,4 +30,4 @@ const script = new vm.Script(
     filename: path.join(__dirname, 'index.js')
   })
 
-script.runInNewContext({ Mintable, MyMintable, console });
+script.runInNewContext({ Mintable, MyMintable, console })
