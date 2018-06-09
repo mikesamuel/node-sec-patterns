@@ -21,7 +21,8 @@
     "cover": "istanbul cover _mocha",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "lint": "./node_modules/.bin/standard && ./node_modules/.bin/eslint .",
-    "test": "mocha"
+    "test": "mocha",
+    "prepack": "npm run lint && npm test"
   },
   "author": "@mikesamuel",
   "license": "Apache-2.0",
@@ -56,7 +57,7 @@
     }
   },
   "eslintIgnore": [
-    "test/cases-pp"
+    "test/cases-babel-out"
   ],
   "standard": {
     "ignore": [

@@ -17,7 +17,9 @@ try {
 }
 
 // a factory that produces dummy values.
-const fallback = (...atv) => ({})
+function fallback (...atv) {
+  // this function body left intentionally blank
+}
 const myMinter = require.keys.unbox(
   Mintable.minterFor(MyMintable),
   () => true,

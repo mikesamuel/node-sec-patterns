@@ -63,12 +63,7 @@ describe('mintable', () => {
         } else if (path.extname(baseName) === '.js') {
           const { code } = babel.transformFileSync(
             srcFile, {
-              plugins: [
-                [
-                  'module-keys/babel',
-                  { rootDir: caseInputDir }
-                ]
-              ]
+              plugins: [ [ 'module-keys/babel', { rootDir: caseInputDir } ] ]
             })
           fileSystem.writeFileSync(destFile, code)
         } else {

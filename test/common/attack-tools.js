@@ -13,7 +13,7 @@ const { defineProperty, hasOwnProperty } = Object
  */
 function temporarilyReplace (obj, key, replacement, action) {
   const name = (obj && (obj.name || obj.constructor.name)) || ''
-  const description = name ? `${name}.${key}` : key;
+  const description = name ? `${name}.${key}` : key
   console.log(`Monkeypatching ${description}`)
   const original = obj[key]
   const originallyHad = apply(hasOwnProperty, obj, [ key ])
@@ -25,10 +25,10 @@ function temporarilyReplace (obj, key, replacement, action) {
       obj,
       key,
       {
-        get: function () {
+        get () {
           return replacement(description, original, this)
         },
-        set: function (x) {
+        set (x) {
           throw new Error(`Trying to set ${description}`)
         },
         enumerable: true,

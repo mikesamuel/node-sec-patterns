@@ -1,5 +1,7 @@
 /* eslint array-element-newline: "off" */
 
+'use strict'
+
 const { Mintable, authorize } = require('../../../index')
 const { MyMintable } = require('../../common/my-mintable')
 const { temporarilyReplace } = require('../../common/attack-tools')
@@ -7,14 +9,12 @@ const { apply } = Reflect
 
 authorize(require('./package.json'))
 
-let intercepted = []
+const intercepted = []
 
 function gotcha (description, original, thisValue) {
-  //console.error(`Intercepted call on ${description}`)
-  //console.trace()
   intercepted[intercepted.length] = description
-  return function (...args) {
-    return apply(original, this, args)
+  return function wrapper (...args) {
+    return apply(original, this, args) // eslint-disable-line no-invalid-this
   }
 }
 
@@ -51,7 +51,7 @@ replaceAll(
     [ Array.prototype, 'forEach' ],
     [ Array.prototype, 'slice' ],
     [ Function.prototype, 'apply' ],
-//  [ Function.prototype, 'call' ],
+    // [ Function.prototype, 'call' ],
     [ Reflect, 'apply' ],
     [ RegExp.prototype, 'exec' ],
     [ RegExp.prototype, 'test' ],
@@ -63,8 +63,7 @@ replaceAll(
     [ String.prototype, 'split' ],
     [ String.prototype, 'toLowerCase' ],
     [ WeakSet.prototype, 'has' ],
-    [ WeakSet.prototype, 'add' ],
-
+    [ WeakSet.prototype, 'add' ]
   ],
   0,
   () => {
