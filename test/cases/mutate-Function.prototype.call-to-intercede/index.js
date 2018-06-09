@@ -3,16 +3,18 @@
 const { Mintable, authorize } = require('../../../index')
 const { MyMintable } = require('../../common/my-mintable')
 const { temporarilyReplace } = require('../../common/attack-tools')
+const { apply } = Reflect
 
 authorize(require('./package.json'))
 
-let intercepted = false
+let intercepted = []
 
-function gotcha (obj, key) {
-  return () => {
-    console.error(`Intercepted call on ${obj}.${key}`)
-    console.trace()
-    intercepted = true
+function gotcha (description, original, thisValue) {
+  //console.error(`Intercepted call on ${description}`)
+  //console.trace()
+  intercepted[intercepted.length] = description
+  return function (...args) {
+    return apply(original, this, args)
   }
 }
 
@@ -21,7 +23,7 @@ function replaceAll (replacements, index, action) {
   if (index < replacements.length) {
     const [ obj, key ] = replacements[index]
     temporarilyReplace(
-      obj, key, gotcha(obj, key),
+      obj, key, gotcha,
       () => {
         replaceAll(replacements, index + 1, action)
       })
@@ -37,23 +39,38 @@ replaceAll(
     [ Object, 'defineProperties' ],
     [ Object, 'defineProperty' ],
     [ Object, 'getPrototypeOf' ],
+    [ Object, 'keys' ],
     [ Object, 'freeze' ],
+    [ Object.prototype, 'hasOwnProperty' ],
+    [ global, 'Map' ],
+    [ global, 'Set' ],
+    [ global, 'WeakMap' ],
     [ global, 'WeakSet' ],
-    [ Function.prototype, 'apply' ],
-    [ Function.prototype, 'call' ],
     [ Array.prototype, 'indexOf' ],
     [ Array.prototype, 'map' ],
     [ Array.prototype, 'forEach' ],
+    [ Array.prototype, 'slice' ],
+    [ Function.prototype, 'apply' ],
+//  [ Function.prototype, 'call' ],
+    [ Reflect, 'apply' ],
     [ RegExp.prototype, 'exec' ],
+    [ RegExp.prototype, 'test' ],
+    [ String.prototype, 'charAt' ],
+    [ String.prototype, 'charCodeAt' ],
+    [ String.prototype, 'indexOf' ],
+    [ String.prototype, 'match' ],
     [ String.prototype, 'replace' ],
     [ String.prototype, 'split' ],
+    [ String.prototype, 'toLowerCase' ],
     [ WeakSet.prototype, 'has' ],
-    [ WeakSet.prototype, 'add' ]
+    [ WeakSet.prototype, 'add' ],
+
   ],
   0,
   () => {
     try {
-      Mintable.minterFor(MyMintable)
+      require.keys.unboxStrict(
+        Mintable.minterFor(MyMintable), () => true)
       console.log('Got My minter')
     } catch (ignored) {
       console.log('Denied My minter')
@@ -61,7 +78,7 @@ replaceAll(
     Mintable.verifierFor(MyMintable)(null)
   })
 
-if (intercepted) {
+if (intercepted.length) {
   // Fail loudly.
-  throw new Error()
+  throw new Error(intercepted.join('\n'))
 }

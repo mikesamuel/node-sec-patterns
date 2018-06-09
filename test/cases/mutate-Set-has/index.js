@@ -10,10 +10,10 @@ const { temporarilyReplace } = require('../../common/attack-tools')
 const forgery = Object.create(MyMintable)
 
 temporarilyReplace(
-  WeakSet.prototype, 'has', (x) => true,
+  WeakSet.prototype, 'has', () => (x) => true,
   () => {
     temporarilyReplace(
-      Set.prototype, 'has', (x) => true,
+      Set.prototype, 'has', () => (x) => true,
       () => {
         const verifier = Mintable.verifierFor(MyMintable)
         console.log(`verified ${verifier(forgery)}`)

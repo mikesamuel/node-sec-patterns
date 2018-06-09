@@ -26,7 +26,7 @@ const { MyMintable } = require('../../common/my-mintable')
 
 let myMinter = null
 try {
-  myMinter = Mintable.minterFor(MyMintable)
+  myMinter = require.keys.unboxStrict(Mintable.minterFor(MyMintable), () => true)
   console.log('dodgy-code: Got My minter')
 } catch (ignored) {
   myMinter = () => Object.create(MyMintable)

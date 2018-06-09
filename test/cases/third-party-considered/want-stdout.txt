@@ -1,10 +1,10 @@
 In @scoped/reviewed
 pass
 In @scoped/unreviewed
-mintable: @scoped/unreviewed not allowed to mint MY
+Could not unbox
 In unscoped-reviewed
 pass
 In unscoped-unreviewed
-mintable: unscoped-unreviewed not allowed to mint MY
+Could not unbox
 In ./index
 pass

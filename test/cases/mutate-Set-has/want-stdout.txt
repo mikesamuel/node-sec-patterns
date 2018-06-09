@@ -1,5 +1,5 @@
-Monkeypatching has
-Monkeypatching has
+Monkeypatching WeakSet.has
+Monkeypatching Set.has
 verified false
-Monkeyunpatching has
-Monkeyunpatching has
+Monkeyunpatching Set.has
+Monkeyunpatching WeakSet.has

@@ -2,18 +2,38 @@
 
 /* eslint "no-console": off */
 
+const { apply } = Reflect
+const { defineProperty, hasOwnProperty } = Object
+
 /**
  * Can be used to attack intrinsics.
  *
- * Executes action in a context where obj[key] = replacement and
+ * Executes action in a context where obj[key] = replacement(description, original, thisValue, args) and
  * cleans up after itself.
  */
 function temporarilyReplace (obj, key, replacement, action) {
-  console.log(`Monkeypatching ${key}`)
+  const name = (obj && (obj.name || obj.constructor.name)) || ''
+  const description = name ? `${name}.${key}` : key;
+  console.log(`Monkeypatching ${description}`)
   const original = obj[key]
-  const originallyHad = Object.hasOwnProperty.call(obj, key)
+  const originallyHad = apply(hasOwnProperty, obj, [ key ])
   try {
-    obj[key] = replacement
+    if (originallyHad) {
+      delete obj[key]
+    }
+    defineProperty(
+      obj,
+      key,
+      {
+        get: function () {
+          return replacement(description, original, this)
+        },
+        set: function (x) {
+          throw new Error(`Trying to set ${description}`)
+        },
+        enumerable: true,
+        configurable: true
+      })
   } catch (ignored) {
     // Reporting the error can help diagnosis but makes the log output
     // differ on different Node versions.
@@ -21,12 +41,11 @@ function temporarilyReplace (obj, key, replacement, action) {
   try {
     return action()
   } finally {
-    console.log(`Monkeyunpatching ${key}`)
+    console.log(`Monkeyunpatching ${description}`)
     try {
+      delete obj[key]
       if (originallyHad) {
         obj[key] = original
-      } else {
-        delete obj[key]
       }
     } catch (ignored) {
       // Reporting the error can help diagnosis but makes the log output

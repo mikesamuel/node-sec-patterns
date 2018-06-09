@@ -16,16 +16,16 @@ try {
   console.log('reauthorization failed')
 }
 
-let myMinter = null
-try {
-  myMinter = Mintable.minterFor(MyMintable)
-  console.log('Got My minter')
-} catch (ignored) {
+// a factory that produces dummy values.
+const fallback = (...atv) => ({})
+const myMinter = require.keys.unbox(
+  Mintable.minterFor(MyMintable),
+  () => true,
+  fallback)
+if (fallback === myMinter) {
   console.log('Retrying with substitute')
-  myMinter = Mintable.minterFor(
-    MyMintable,
-    // Substitute a factory that produces dummy values.
-    (...argv) => ({}))
+} else {
+  console.log('Got My minter')
 }
 
 const myInstance = myMinter()

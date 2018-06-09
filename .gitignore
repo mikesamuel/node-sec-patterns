@@ -23,6 +23,9 @@ coverage
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
+# Babelized output for test files
+test/cases-babel-out
+
 # Bower dependency directory (https://bower.io/)
 bower_components
 

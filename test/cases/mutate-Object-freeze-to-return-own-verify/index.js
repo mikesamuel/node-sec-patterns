@@ -6,7 +6,7 @@ authorize(require('./package.json'))
 
 temporarilyReplace(
   Object, 'freeze',
-  (obj) => {
+  () => (obj) => {
     if (typeof obj === 'function' && obj.length === 1) {
       return () => true
     }
@@ -14,7 +14,7 @@ temporarilyReplace(
   },
   () => {
     try {
-      Mintable.minterFor(MyMintable)
+      require.keys.unboxStrict(Mintable.minterFor(MyMintable), () => true)
       console.log('Got My minter')
     } catch (ignored) {
       console.log('Denied My minter')

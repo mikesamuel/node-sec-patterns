@@ -15,11 +15,6 @@ This module attempts to further that goal by enabling and encouraging
 development practices that make it transparent what code has to
 function correctly for a security property hold.
 
-## Known Issues
-
-There is a known bypass (see Travis build failure).
-Hopefully, [per module keys][] will address this.
-
 ## Glossary
 
 *  **Mutual Suspicion** - Two modules are mutually suspicious when
@@ -152,27 +147,30 @@ Instead of using `new` just pass the same arguments to the minter.
 
 ```js
 // The minter may be fetched once.
-const fooMinter = Mintable.minterFor(FooContractType)
+const fooMinter = require.keys.unboxStrict(Mintable.minterFor(FooContractType))
 
 const newInstance =
   // instead of (new FooContractType(x, y))
   fooMinter(x, y)
 ```
 
+Minters are [boxed][box], so you have to unbox a minter before using it.
+
 ## Degrading gracefully
 Library code may want to mint a value when it has authority to do so
 or degrade gracefully when it does not.
 
-Trying to access `Mintable.minterFor(`*T*`)` when you do not have the
+Trying to unbox `Mintable.minterFor(`*T*`)` when you do not have the
 authority to mint values of type *T* will `throw` but you may pass a
-fallback function for `Mintable.minterFor` to return when you are not
+fallback function to [`unbox`][unbox] to return when you are not
 authorized.  Either way, users of your library who have not
 whitelisted it will get a log warning to prompt them to consider
 granting authority to your library.
 
 ```js
-const fooMinter = Mintable.minterFor(
-  FooContractType,
+const fooMinter = require.keys.unbox(
+  Mintable.minterFor(FooContractType),
+  () => true,
   fallbackValueMaker)
 ```
 
@@ -216,3 +214,5 @@ This module provides a mechanism by which:
 
 [safe contract types]: https://github.com/google/safe-html-types/blob/master/doc/safehtml-types.md#types
 [per module keys]: https://gist.github.com/mikesamuel/bd653e9f69595f7b9d7dd4381a154e02
+[box]: https://npmjs.org/package/module-keys#box
+[unbox]: https://npmjs.org/package/module-keys#unbox

@@ -12,7 +12,8 @@ Object.defineProperty(
     writable: false
   })
 
-const okMinter = Mintable.minterFor(OkMintable)
+const okMinter = require.keys.unboxStrict(
+  Mintable.minterFor(OkMintable), () => true)
 console.log('Got Ok minter')
 
 const okInstance = okMinter()
@@ -33,11 +34,12 @@ Object.defineProperty(
 
 let deniedMinter = null
 try {
-  deniedMinter = Mintable.minterFor(DeniedMintable)
+  deniedMinter = require.keys.unboxStrict(
+    Mintable.minterFor(DeniedMintable), () => true)
   console.log('Got Denied minter')
 } catch (ignored) {
-  deniedMinter = Mintable.minterFor(
-    DeniedMintable,
+  deniedMinter = require.keys.unbox(
+    Mintable.minterFor(DeniedMintable), () => true,
     // Substitute a factory for non-verifying values
     (...argv) => Object.create(DeniedMintable))
 }

@@ -1,2 +1,2 @@
-mintable: @scoped/unreviewed not allowed to mint MY
-mintable: unscoped-unreviewed not allowed to mint MY
+mintable: @scoped/unreviewed/index.js not allowed to mint MY
+mintable: unscoped-unreviewed/index.js not allowed to mint MY

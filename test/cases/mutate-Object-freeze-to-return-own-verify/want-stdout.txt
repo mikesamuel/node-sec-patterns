@@ -1,4 +1,4 @@
-Monkeypatching freeze
+Monkeypatching Object.freeze
 Denied My minter
 Verified=false
-Monkeyunpatching freeze
+Monkeyunpatching Object.freeze

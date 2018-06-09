@@ -5,9 +5,9 @@ const { temporarilyReplace } = require('../../common/attack-tools')
 authorize(require('./package.json'))
 
 // Make the grants array look like it has an entry at element 0
-temporarilyReplace(Array.prototype, 0, 'index.js', () => {
+temporarilyReplace(Array.prototype, 0, () => 'index.js', () => {
   try {
-    Mintable.minterFor(MyMintable)
+    require.keys.unboxStrict(Mintable.minterFor(MyMintable), () => true)
     console.log('Got My minter')
   } catch (ignored) {
     console.log('Denied My minter')

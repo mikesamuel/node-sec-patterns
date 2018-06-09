@@ -12,7 +12,8 @@ Object.defineProperty(
     writable: false
   })
 
-const myMinter = Mintable.minterFor(MyMintable)
+const myMinter = require.keys.unboxStrict(
+  Mintable.minterFor(MyMintable), () => true)
 console.log('Got My minter')
 
 const myInstance = myMinter()

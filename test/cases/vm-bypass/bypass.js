@@ -9,11 +9,12 @@ const script = new vm.Script(
   function main () {
     let myMinter = null
     try {
-      myMinter = Mintable.minterFor(MyMintable)
+      myMinter = require.keys.unboxStrict(
+          Mintable.minterFor(MyMintable), () => true)
       console.log('B Got My minter')
     } catch (ignored) {
-      myMinter = Mintable.minterFor(
-        MyMintable,
+      myMinter = require.keys.unbox(
+        Mintable.minterFor(MyMintable), () => true,
         // Substitute a factory for non-verifying values
         (...argv) => Object.create(MyMintable))
     }
@@ -30,4 +31,4 @@ const script = new vm.Script(
     filename: path.join(__dirname, 'index.js')
   })
 
-script.runInNewContext({ Mintable, MyMintable, console })
+script.runInNewContext({ Mintable, MyMintable, console, require })
