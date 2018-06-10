@@ -1,7 +1,7 @@
 {
   "name": "node-sec-patterns",
   "description": "Allow projects control over which dependencies can create objects that encapsulate security guarantees.",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "keywords": [
     "design-patterns",
     "security",
