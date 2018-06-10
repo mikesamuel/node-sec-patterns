@@ -15,7 +15,7 @@
     "lib/mintable.js"
   ],
   "dependencies": {
-    "module-keys": "^1.0.1"
+    "module-keys": "^1.0.3"
   },
   "scripts": {
     "cover": "istanbul cover _mocha",
@@ -24,6 +24,9 @@
     "test": "mocha",
     "prepack": "npm run lint && npm test"
   },
+  "pre-commit": [
+    "prepack"
+  ],
   "author": "@mikesamuel",
   "license": "Apache-2.0",
   "repository": {
@@ -44,6 +47,7 @@
     "istanbul": "^0.4.5",
     "mocha": "^4.0.1",
     "mocha-lcov-reporter": "^1.3.0",
+    "pre-commit": "^1.2.2",
     "standard": "*"
   },
   "eslintConfig": {
