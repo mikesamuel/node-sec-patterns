@@ -71,7 +71,7 @@ via a `"mintable"` propery in your `package.json` like the below:
     "grants": {
       "contract-key-foo": [
         "foo",
-        "lib/bar.js"
+        "./lib/bar.js"
       ],
     }
   }
@@ -188,14 +188,14 @@ This enables workflows like:
    that pass a mintable type's verifier.
 2. They add a third-party dependency that either produces that type
    via a minter or has a dependency that does.
-3. The developer adds a unit test which fails because the
-   third-party dependency has not been allowed access to the minter.
-4. The developer adds a whitelist entry to the package.json for their
+3. The developer adds a unit test which fails because no grant
+   provides the third-party dependency access to the minter.
+4. The developer adds a whitelist entry to the `package.json` for their
    project granting access.
 5. Later, they issue a pull request to pull their changes into master,
-   and/or when a push master builds a release candidate, the change
-   to `package.json` is reviewed with an eye to security, and the
-   third-party module is scrutinized as security critical.
+   and/or when a push master builds a release candidate, they review
+   changes to `package.json` and see that the added dependency is
+   security critical.
 
 This allows a development team, collectively, to reify some security
 guarantees in JavaScript objects and ensure that only a small,
