@@ -12,7 +12,7 @@ rm -rf "$TMP_WORKSPACE"
 mkdir -p "$TMP_WORKSPACE"/package
 
 # Repack, and check the contents
-export TARBALL="$(npm pack)"
+export TARBALL="$(npm pack 2> /dev/null | tail -1)"
 
 echo PACKAGE CONTENTS:
 tar tfz "$TARBALL"
