@@ -12,7 +12,11 @@ authorize(require('./package.json'))
 const intercepted = []
 
 function gotcha (description, original, thisValue) {
-  intercepted[intercepted.length] = description
+  try {
+    throw new Error()
+  } catch (exc) {
+    intercepted[intercepted.length] = [ description, exc ]
+  }
   return function wrapper (...args) {
     return apply(original, this, args) // eslint-disable-line no-invalid-this
   }
@@ -22,8 +26,14 @@ function gotcha (description, original, thisValue) {
 function replaceAll (replacements, index, action) {
   if (index < replacements.length) {
     const [ obj, key ] = replacements[index]
+    const moduleLoadingUses =
+      // eslint-disable-next-line no-magic-numbers
+      key === 'apply' && parseInt(process.versions.node, 10) < 10
     temporarilyReplace(
-      obj, key, gotcha,
+      obj, key,
+      // HACK.  Node < 9 in module uses the module loader.
+      // which makes tests noisy.
+      moduleLoadingUses ? (desc, orig) => orig : gotcha,
       () => {
         replaceAll(replacements, index + 1, action)
       })
@@ -79,5 +89,9 @@ replaceAll(
 
 if (intercepted.length) {
   // Fail loudly.
-  throw new Error(intercepted.join('\n'))
+  for (const [ desc, exc ] of intercepted) {
+    console.error(desc)
+    console.error(exc)
+  }
+  throw new Error('Vuln to intercession attacks')
 }
