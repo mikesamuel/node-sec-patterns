@@ -14,7 +14,7 @@ important security properties.
 
 This module attempts to further that goal by enabling and encouraging
 development practices that make it transparent what code has to
-function correctly for a security property hold.
+function correctly for a security property to hold.
 
 ## Glossary
 
