@@ -6,7 +6,28 @@ design patterns in Node.js code.
 [![Build Status](https://travis-ci.org/mikesamuel/node-sec-patterns.svg?branch=master)](https://travis-ci.org/mikesamuel/node-sec-patterns)
 [![Dependencies Status](https://david-dm.org/mikesamuel/node-sec-patterns/status.svg)](https://david-dm.org/mikesamuel/node-sec-patterns)
 [![npm](https://img.shields.io/npm/v/node-sec-patterns.svg)](https://www.npmjs.com/package/node-sec-patterns)
+[![Install Size](https://packagephobia.now.sh/badge?p=safesql)](https://packagephobia.now.sh/result?p=node-sec-patterns)
 [![Known Vulnerabilities](https://snyk.io/test/github/mikesamuel/node-sec-patterns/badge.svg?targetFile=package.json)](https://snyk.io/test/github/mikesamuel/node-sec-patterns?targetFile=package.json)
+
+## Table of Contents
+
+*  [Installation](#installation)
+*  [Goal](#goal)
+*  [Glossary](#glossary)
+*  [Getting Started](#getting-started)
+*  [Configuration](#configuration)
+*  [Defining a Mintable Type](#defining-a-mintable-type)
+*  [Example](#example)
+*  [Creating Mintable values](#creating-mintable-values)
+*  [Degrading gracefully](#degrading-gracefully)
+*  [Verifying values](#verifying-values)
+*  [Workflow](#workflow---making-security-critical-deep-dependencies-apparent)
+
+## Installation
+
+```bash
+$ npm install node-sec-patterns
+```
 
 ## Goal
 Make it easier for project teams to produce code that preserves
@@ -104,7 +125,7 @@ key.  This property should be const.
 A simple way to do this is
 
 ```js
-const { Mintable } = require('mintable')
+const { Mintable } = require('node-sec-patterns')
 
 class FooContractType extends Mintable {
   constructor () {
@@ -181,6 +202,10 @@ Values created by the fallback function will not pass the verifier.
 `Object.create` can forge values that pass `instanceof` checks, so
 be sure to use the verifier to check whether a value was created
 by the minter.
+
+```js
+const isFoo = Mintable.verifierFor(FooContractType)
+```
 
 ## Workflow - making security critical deep dependencies apparent
 A package may allow some modules access to the minter but not others.
