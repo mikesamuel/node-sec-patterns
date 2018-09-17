@@ -11,8 +11,7 @@
   ],
   "main": "index.js",
   "files": [
-    "index.js",
-    "lib/mintable.js"
+    "index.js"
   ],
   "dependencies": {
     "module-keys": "^1.0.3"
