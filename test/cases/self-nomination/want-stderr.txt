@@ -1,0 +1,3 @@
+    mintable: @bar/Bar/index.js not allowed to mint CK-A
+    mintable: baz/index.js not allowed to mint CK-A
+    mintable: baz/index.js not allowed to mint CK-B

@@ -1,0 +1,13 @@
+{
+  "mintable": {
+    "mode": "enforce",
+    "grants": {
+      "CK-A": ["./index.js"],
+      "CK-B": ["./index.js"]
+    },
+    "second": [
+      "foo",
+      "@bar/Bar/minimal.json"
+    ]
+  }
+}

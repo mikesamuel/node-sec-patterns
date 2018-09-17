@@ -16,6 +16,7 @@ design patterns in Node.js code.
 *  [Glossary](#glossary)
 *  [Getting Started](#getting-started)
 *  [Configuration](#configuration)
+   * [Suggesting grants](#suggesting-grants)
 *  [Defining a Mintable Type](#defining-a-mintable-type)
 *  [Example](#example)
 *  [Creating Mintable values](#creating-mintable-values)
@@ -115,6 +116,93 @@ it defaults to `"enforce"`.
 If `"mode"` is `"permissive"` then all accesses are allowed.
 
 If `"mode"` is `"report-only"` then all accesses are allowed.
+
+### Suggesting grants
+
+Library code may also suggest grants.  It may **self nominate** for
+certain privileges, and then an application may **second** those
+privileges.
+
+For example, if a library's package.json includes
+
+```json
+{
+  ...
+  "mintable": {
+    "selfNominate": [
+      "contractKey0",
+      "contractKey1"
+    ]
+  }
+}
+```
+
+and an application's package.json includes
+
+```json
+{
+  ...
+  "mintable": {
+    "second": [
+      "path/to/library"
+    ]
+  }
+}
+```
+
+then `Mintable.minterFor` will behave as if the application's
+package.json had done
+
+```json
+{
+  ...
+  "mintable": {
+    "grants": {
+      "contractKey0": [ "path/to/library" ],
+      "contractKey1": [ "path/to/library" ]
+    }
+  }
+}
+```
+
+Application maintainers can run the below to see what effect self nominations have,
+but keep in mind that a package might change its self nominations in future versions so
+seconding self-nominated grants for a module is placing trust in that module's future
+development practices.
+
+```sh
+$ node -e 'for (const second of require(`./package.json`).mintable.second) {
+  const config = /[.]json$/.test(second) ? second : `${ second }/package.json`;
+  console.group(second);
+  console.log(JSON.stringify(require(config).mintable.selfNominate, null, 2));
+  console.groupEnd();
+}'
+```
+
+Seconded nominations are resolved using the following algorithm:
+
+1. for (targetConfigPath of configuration.mintable.second)
+   1.  Make sure we're loading a configuration file:
+       1.  if targetConfigPath does not end with `.json` then targetConfigPath += '/package.json'
+   1.  Infer the target package name from the configuration path file:
+       1.  let targetPackage = require.resolve(targetConfigPath)
+       1.  targetPackage = targetPackage.split('/')
+       1.  targetPackage = targetPackage.slice(targetPackage.indexOf('node_modules') + 1)
+       1.  targetPackage = targetPackage.slice(0, targetPackage[0][0] === '@' ? 2 : 1)
+       1.  targetPackage = targetPackage.join('/')
+   1.  Fetch the target configuration
+       1.  let targetConfig = require(targetConfigPath)
+   1.  Incorporate any self nominations into the application's grants
+       1.  let selfNominations = (targetConfig.mintable || {}).selfNominate || []
+       1.  for (selfNomination of selfNominations)
+           1.  grants[selfNomination] = grants[selfNomination] || []
+           1.  grants[selfNomination].push(
+
+
+If a self nomination path ends in `.json` then `/package.json` is not appended to the
+config file.
+
+Internal package directories are stripped when figuring out to whom access is granted.
 
 
 ## Defining a Mintable Type

@@ -1,0 +1,34 @@
+Finished authorize
+CK-A
+  Got minter
+  Minted true
+  Verified true
+CK-B
+  Got minter
+  Minted true
+  Verified true
+CK-A
+  Got minter
+  Minted true
+  Verified true
+index require foo
+  CK-A
+    Got minter
+    Minted true
+    Verified true
+  CK-B
+    Got minter
+    Minted true
+    Verified true
+index require @bar/Bar
+  CK-A
+    Denied access to minter
+  CK-B
+    Got minter
+    Minted true
+    Verified true
+index require baz
+  CK-A
+    Denied access to minter
+  CK-B
+    Denied access to minter
