@@ -217,7 +217,7 @@ class Mintable {
     if (!(privates && privates.mayConstruct())) {
       const { name } = concreteType
       throw new Error(
-        `Construct instances via ${name}.mint(...), not via new ${name}`)
+        `Construct instances using Mintable.minterFor(${name}), not via new ${name}`)
     }
   }
 }
