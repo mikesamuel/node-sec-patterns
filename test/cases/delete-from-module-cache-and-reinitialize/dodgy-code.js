@@ -1,18 +1,17 @@
 'use strict'
 
 // Delete all trace from the module cache
-void ([ '../../../index.js', '../../../lib/mintable.js' ].forEach((path) => {
-  const absPath = require.resolve(path)
-  if (!(absPath in require.cache)) {
-    throw new Error(`${absPath} uncached`)
-  }
-  try {
-    delete require.cache[absPath]
-  } catch (ignored) {
-    // Don't dump the error since it includes absolute path info
-    console.error(`Failed to delete cache entry for ${path}`)
-  }
-}))
+const relPath = '../../../index.js'
+const absPath = require.resolve(relPath)
+if (!(absPath in require.cache)) {
+  throw new Error(`${absPath} uncached`)
+}
+try {
+  delete require.cache[absPath]
+} catch (ignored) {
+  // Don't dump the error since it includes absolute path info
+  console.error(`Failed to delete cache entry for ${relPath}`)
+}
 
 const { Mintable, authorize } = require('../../../index.js')
 

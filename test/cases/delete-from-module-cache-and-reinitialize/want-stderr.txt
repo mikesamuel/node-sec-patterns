@@ -1,3 +1,3 @@
-Failed to delete cache entry for ../../../lib/mintable.js
+Failed to delete cache entry for ../../../index.js
 Error: Cannot re-initialize mintable
 mintable: ./dodgy-code.js not allowed to mint MY
