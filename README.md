@@ -188,14 +188,14 @@ Seconded nominations are resolved using the following algorithm:
        1.  let targetPackage = require.resolve(targetConfigPath)
        1.  targetPackage = targetPackage.split('/')
        1.  targetPackage = targetPackage.slice(targetPackage.indexOf('node_modules') + 1)
-       1.  targetPackage = targetPackage.slice(0, targetPackage[0][0] === '@' ? 2 : 1)
+       1.  targetPackage = targetPackage.slice(0, targetPackage\[0\]\[0\] === '@' ? 2 : 1)
        1.  targetPackage = targetPackage.join('/')
    1.  Fetch the target configuration
        1.  let targetConfig = require(targetConfigPath)
    1.  Incorporate any self nominations into the application's grants
-       1.  let selfNominations = (targetConfig.mintable || {}).selfNominate || []
+       1.  let selfNominations = (targetConfig.mintable || {}).selfNominate || \[\]
        1.  for (selfNomination of selfNominations)
-           1.  grants[selfNomination] = grants[selfNomination] || []
+           1.  grants[selfNomination] = grants[selfNomination] || \[\]
            1.  grants[selfNomination].push(
 
 
