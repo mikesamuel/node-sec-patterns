@@ -34,8 +34,7 @@ const { dedot, dirname } = require('module-keys/lib/relpath.js')
 const { isAbsolute, sep } = require('path')
 
 // Module keys polyfill as per module-keys/babel
-require('module-keys/cjs').polyfill(
-  module, require, 'node_modules/node-sec-patterns/lib/mintable.js')
+require('module-keys/cjs').polyfill(module, require, module.id)
 
 const { isPublicKey, publicKeySymbol } = require('module-keys')
 
