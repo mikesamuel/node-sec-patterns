@@ -31,7 +31,7 @@ const weakSetHas = WeakSet.prototype.has
 const { indexOf, lastIndexOf, split, substring } = String.prototype
 
 const { dedot, dirname } = require('module-keys/lib/relpath.js')
-const { sep } = require('path')
+const { isAbsolute, sep } = require('path')
 
 // Module keys polyfill as per module-keys/babel
 require('module-keys/cjs').polyfill(
@@ -295,6 +295,13 @@ function mayAccessMint (concreteType) {
 
   const grantRecord = keysGranted(contractKey)
 
+  function toFullModuleId (moduleId) {
+    if (moduleId[0] !== '/' && !isAbsolute(moduleId)) {
+      return `${configRoot}${sep}${moduleId}`
+    }
+    return moduleId
+  }
+
   function mayMint (pubKey) {
     const moduleId = dedot(pubKey.moduleIdentifier)
     if (grantRecord && isPublicKey(pubKey) && pubKey()) {
@@ -307,10 +314,11 @@ function mayAccessMint (concreteType) {
       // yet to resolve keys.
       if (findGrantMatch(grants, moduleId)) {
         let publicKey = null
+
         // Treat the exported publicKey as the source of truth.
         try {
           // eslint-disable-next-line global-require
-          publicKey = require(`${configRoot}${sep}${moduleId}`)[publicKeySymbol]
+          publicKey = require(toFullModuleId(moduleId))[publicKeySymbol]
         } catch (failedToRequire) {
           // deny
         }
