@@ -28,7 +28,7 @@ const mapGet = Map.prototype.get
 const mapSet = Map.prototype.set
 const weakSetAdd = WeakSet.prototype.add
 const weakSetHas = WeakSet.prototype.has
-const { lastIndexOf, split, substring } = String.prototype
+const { indexOf, lastIndexOf, split, substring } = String.prototype
 
 const { dedot, dirname } = require('module-keys/lib/relpath.js')
 const { sep } = require('path')
@@ -345,11 +345,23 @@ function arrayHad (arr, elt) {
 }
 
 function relModuleId (moduleIdentifier) {
-  const prefix = 'node_modules/'
-  const i = apply(lastIndexOf, moduleIdentifier, [ prefix, 0 ])
-  if (i === 0) {
-    // node_modules/foo/bar/baz -> "foo/bar/baz"
-    return apply(substring, moduleIdentifier, [ i + prefix.length ])
+  {
+    const prefix = 'node_modules/'
+    const i = apply(lastIndexOf, moduleIdentifier, [ prefix, 0 ])
+    if (i === 0) {
+      // node_modules/foo/bar/baz -> "foo/bar/baz"
+      return apply(substring, moduleIdentifier, [ i + prefix.length ])
+    }
+  }
+  {
+    const infix = '/node_modules/'
+    const i = apply(indexOf, moduleIdentifier, [ infix ])
+    if (i >= 0) {
+      return apply(substring, moduleIdentifier, [ i + infix.length ])
+    }
+  }
+  if (moduleIdentifier[0] === '/') {
+    return moduleIdentifier
   }
   return `./${moduleIdentifier}`
 }
