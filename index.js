@@ -10,6 +10,7 @@
 // Our security relies on some of these behaving as expected.
 // In the README, we insist on loading early, and take that as given
 // below.
+const { Boolean } = global
 const { isArray } = Array
 const {
   create, defineProperties, defineProperty,
@@ -55,83 +56,10 @@ let whitelist = null
  * One of ('enforce', 'report-only', 'permissive').
  */
 let failureMode = 'permissive'
-
 /**
- * Updates whitelist to add the target package to package whitelists
- * for the given contract keys.
+ * True to dump information about grant checks to console.info.
  */
-function incorporateSelfNominationsFor (targetPackage, contractKeys) {
-  if (isArray(contractKeys)) {
-    for (let i = 0, nNoms = contractKeys.length; i < nNoms; ++i) {
-      if (apply(hasOwnProperty, contractKeys, [ i ])) {
-        const selfNomination = contractKeys[i]
-        whitelist[selfNomination] = whitelist[selfNomination] || []
-        apply(arrayPush, whitelist[selfNomination], [ targetPackage ])
-      }
-    }
-  }
-}
-
-function computeResolvePaths () {
-  const resolvePaths = []
-
-  const configRootParts = apply(split, configRoot, [ sep ])
-  for (let i = configRootParts.length; --i >= 0;) {
-    resolvePaths[resolvePaths.length] = `${
-      apply(
-        arrayJoin,
-        apply(arraySlice, configRootParts, [ 0, i + 1 ]),
-        [ sep ])
-    }${sep}node_modules`
-  }
-  return resolvePaths
-}
-
-/**
- * Loads configuration files for packages whose self nominations have
- * been seconded and modifies whitelist in place to incorporate them.
- */
-function incorporateSelfNominations (second) {
-  const resolvePaths = computeResolvePaths()
-
-  for (let i = 0, nSeconds = second.length; i < nSeconds; ++i) {
-    if (apply(hasOwnProperty, second, [ i ])) {
-      let targetConfigPath = `${second[i]}`
-      if (!targetConfigPath) {
-        continue
-      }
-      // eslint-disable-next-line no-magic-numbers
-      if (apply(substring, targetConfigPath, [ targetConfigPath.length - 5 ]) !== '.json') {
-        targetConfigPath += '/package.json'
-      }
-      // Infer the target package name from the configuration path file
-      // "path/to/config.json" => "/abs/node_modules/path/to/config.json"
-      const resolvedTargetConfigPath = require.resolve(targetConfigPath, { paths: resolvePaths })
-      let targetPackage = resolvedTargetConfigPath
-      // "/abs/node_modules/path/to/config.json"
-      // => [ "", "abs", "node_modules", "path", "to", "config.json" ]
-      targetPackage = apply(split, targetPackage, [ '/' ])
-      // [ "", "abs", "node_modules", "path", "to", "config.json" ]
-      // => [ "path", "to", "config.json" ]
-      targetPackage = apply(
-        arraySlice, targetPackage,
-        [ apply(arrayIndexOf, targetPackage, [ 'node_modules' ]) + 1 ])
-      // [ "path", "to", "config.json" ] => [ "path" ]
-      // OR [ "@namespace", "path", "to", "..." ] => [ "@namespace", "path" ]
-      targetPackage = apply(
-        arraySlice, targetPackage,
-        [ 0, targetPackage[0][0] === '@' ? 2 : 1 ])
-      // [ "@namespace", "path" ] => "@namespace/path"
-      targetPackage = apply(arrayJoin, targetPackage, [ '/' ])
-      // Fetch the target configuration
-      // eslint-disable-next-line global-require
-      const targetConfig = require(resolvedTargetConfigPath)
-      incorporateSelfNominationsFor(
-        targetPackage,
-        ((targetConfig && targetConfig.mintable) || {}).selfNominate)
-    }
-  }
-}
+let debugGrants = false
 
 /**
  * Takes a configuration object with "mintableGrants" &| "mintableMode"
@@ -145,14 +73,117 @@ function authorize (options) {
     mintable: {
       grants = {},
       second,
-      mode
+      mode,
+      debug
     } = {}
   } = options
 
-  whitelist = create(null)
+  function modeFromConfig () {
+    switch (mode) {
+      case 'enforce': case 'report-only': case 'permissive':
+        return mode
+      case undefined: // eslint-disable-line no-undefined
+        // If no configuration is present, we default to permissive
+        // and rely on package.json linters to warn about the absence
+        // of configuration when there is a non-dev dependency on
+        // this module.
+        return 'mintable' in options ? 'enforce' : 'permissive'
+      default:
+    }
+    throw new Error(`invalid mintable mode ${mode}`)
+  }
 
+  /**
+   * Updates whitelist to add the target package to package whitelists
+   * for the given contract keys.
+   */
+  function incorporateSelfNominationsFor (targetPackage, contractKeys) {
+    if (isArray(contractKeys)) {
+      for (let i = 0, nNoms = contractKeys.length; i < nNoms; ++i) {
+        if (apply(hasOwnProperty, contractKeys, [ i ])) {
+          const selfNomination = contractKeys[i]
+          whitelist[selfNomination] = whitelist[selfNomination] || []
+          apply(arrayPush, whitelist[selfNomination], [ targetPackage ])
+        }
+      }
+    }
+  }
+
+  function computeResolvePaths () {
+    const resolvePaths = []
+
+    const configRootParts = apply(split, configRoot, [ sep ])
+    for (let i = configRootParts.length; --i >= 0;) {
+      const rootPrefix = apply(
+        arrayJoin,
+        apply(arraySlice, configRootParts, [ 0, i + 1 ]),
+        [ sep ])
+      resolvePaths[resolvePaths.length] = `${rootPrefix}${sep}node_modules`
+    }
+    return resolvePaths
+  }
+
+  /**
+   * Loads configuration files for packages whose self nominations have
+   * been seconded and modifies whitelist in place to incorporate them.
+   */
+  function incorporateSelfNominations (seconds) {
+    const resolvePaths = computeResolvePaths()
+
+    for (let i = 0, nSeconds = seconds.length; i < nSeconds; ++i) {
+      if (apply(hasOwnProperty, seconds, [ i ])) {
+        let targetConfigPath = `${seconds[i]}`
+        if (!targetConfigPath) {
+          continue
+        }
+        // eslint-disable-next-line no-magic-numbers
+        if (apply(substring, targetConfigPath, [ targetConfigPath.length - 5 ]) !== '.json') {
+          targetConfigPath += '/package.json'
+        }
+        // Infer the target package name from the configuration path file
+        // "path/to/config.json" => "/abs/node_modules/path/to/config.json"
+        const resolvedTargetConfigPath = require.resolve(targetConfigPath, { paths: resolvePaths })
+        let targetPackage = resolvedTargetConfigPath
+        // "/abs/node_modules/path/to/config.json"
+        // => [ "", "abs", "node_modules", "path", "to", "config.json" ]
+        targetPackage = apply(split, targetPackage, [ '/' ])
+        // [ "", "abs", "node_modules", "path", "to", "config.json" ]
+        // => [ "path", "to", "config.json" ]
+        targetPackage = apply(
+          arraySlice, targetPackage,
+          [ apply(arrayIndexOf, targetPackage, [ 'node_modules' ]) + 1 ])
+        // [ "path", "to", "config.json" ] => [ "path" ]
+        // OR [ "@namespace", "path", "to", "..." ] => [ "@namespace", "path" ]
+        targetPackage = apply(
+          arraySlice, targetPackage,
+          [ 0, targetPackage[0][0] === '@' ? 2 : 1 ])
+        // [ "@namespace", "path" ] => "@namespace/path"
+        targetPackage = apply(arrayJoin, targetPackage, [ '/' ])
+        // Fetch the target configuration
+        // eslint-disable-next-line global-require
+        const targetConfig = require(resolvedTargetConfigPath)
+        const contractKeys = ((targetConfig && targetConfig.mintable) || {}).selfNominate
+        if (debug) {
+          // eslint-disable-next-line no-console
+          console.info(`seconding ${targetPackage}
+  targetConfigPath=${targetConfigPath}
+  resolvedTargetConfigPath=${resolvedTargetConfigPath}
+  contractKeys=${JSON.stringify(contractKeys)}`)
+        }
+        incorporateSelfNominationsFor(targetPackage, contractKeys)
+      }
+    }
+  }
+
+  whitelist = create(null)
+  debugGrants = Boolean(debug)
+
+  if (debug) {
+    // eslint-disable-next-line no-console
+    console.group(`node-sec-patterns authorize`)
+  }
   try {
-    failureMode = modeFromConfig(options, mode)
+    failureMode = modeFromConfig()
 
     // Defensively copy grants over
     for (const key in grants) {
@@ -173,22 +204,14 @@ function authorize (options) {
     }
 
     freeze(whitelist)
-  }
-}
 
-function modeFromConfig (options, mode) {
-  switch (mode) {
-    case 'enforce': case 'report-only': case 'permissive':
-      return mode
-    case undefined: // eslint-disable-line no-undefined
-      // If no configuration is present, we default to permissive
-      // and rely on package.json linters to warn about the absence
-      // of configuration when there is a non-dev dependency on
-      // this module.
-      return 'mintable' in options ? 'enforce' : 'permissive'
-    default:
+    if (debug) {
+      // eslint-disable-next-line no-console
+      console.info(`consolidated whitelist\n${JSON.stringify(whitelist)}`)
+      // eslint-disable-next-line no-console
+      console.groupEnd()
+    }
   }
-  throw new Error(`invalid mintable mode ${mode}`)
 }
 
 /**
@@ -351,7 +374,14 @@ function arrayHad (arr, elt) {
   return false
 }
 
+// Converts a module identifier to one relative to the config root so that it
+// can be compared to whitelist entries.
 function relModuleId (moduleIdentifier) {
+  // "/path/to/root/foo/bar" -> "foo/bar"
+  if (moduleIdentifier[configRoot.length] === '/' &&
+      apply(lastIndexOf, moduleIdentifier, [ configRoot, configRoot.length ]) === 0) {
+    moduleIdentifier = apply(substring, moduleIdentifier, [ configRoot.length + 1 ])
+  }
   {
     const prefix = 'node_modules/'
     const i = apply(lastIndexOf, moduleIdentifier, [ prefix, 0 ])
@@ -364,17 +394,23 @@ function relModuleId (moduleIdentifier) {
     const infix = '/node_modules/'
     const i = apply(indexOf, moduleIdentifier, [ infix ])
     if (i >= 0) {
+      // "/path/to/node_modules/foo/bar/baz" -> "foo/bar/baz"
       return apply(substring, moduleIdentifier, [ i + infix.length ])
     }
   }
   if (moduleIdentifier[0] === '/') {
     return moduleIdentifier
   }
+  // "foo/bar" -> "./foo/bar"
   return `./${moduleIdentifier}`
 }
 
 function findGrantMatch (grants, moduleId) {
   let relModule = relModuleId(moduleId)
+  if (debugGrants) {
+    // eslint-disable-next-line no-console
+    console.info(`node-sec-patterns: looking for grant ${JSON.stringify(moduleId)} in ${JSON.stringify(grants)}`)
+  }
   do {
     if (arrayHad(grants, relModule)) {
       return true
