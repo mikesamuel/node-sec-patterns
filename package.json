@@ -55,6 +55,7 @@
       "standard"
     ],
     "rules": {
+      "complexity": ["error", { "max": 11 }],
       "strict": "off",
       "no-void": "off"
     }

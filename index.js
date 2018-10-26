@@ -44,7 +44,7 @@ const { isPublicKey, publicKeySymbol } = require('module-keys')
  * which should be the main file that loads us early using the
  * idiom above.
  */
-const configRoot = module.parent && module.parent &&
+let configRoot = module.parent && module.parent &&
   module.parent.filename
   ? dirname(module.parent.filename)
   : __dirname
@@ -64,9 +64,13 @@ let debugGrants = false
 /**
  * Takes a configuration object with "mintableGrants" &| "mintableMode"
  */
-function authorize (options) {
+function authorize (options, root) {
   if (whitelist) {
     throw new Error('Cannot re-initialize mintable')
+  }
+
+  if (root) {
+    configRoot = root
   }
 
   const {
