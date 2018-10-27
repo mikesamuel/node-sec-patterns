@@ -66,7 +66,7 @@ function correctly for a security property to hold.
 We assume that the app main file does something like the below
 before any malicious code can run:
 ```js
-require('node-sec-patterns').authorize(require('./package.json'))
+require('node-sec-patterns').authorize(require('./package.json'), '.')
 ```
 
 The code below assumes that `package.json` contains the configuration
@@ -80,6 +80,18 @@ be called by the main module that integrates a production system
 or by test code that tests a module's function under
 various configurations.
 
+### `.authorize(config, projectRoot)`
+
+An application's main module should call the `authorize` function
+before loading modules that need to create mintable types.
+
+It takes two parameters:
+
+*  A configuration object with a property named `"mintable"`.
+   See [Configuration](#configuration).
+*  A path to the project root.  Relative paths in the configuration
+   objects resolve relative to this path.
+   Defaults to the `__dirname` of the module that loaded `.authorize`.
 
 ## Configuration
 If you `authorize`d the package as above, then configuration happens
