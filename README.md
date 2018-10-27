@@ -15,6 +15,7 @@ design patterns in Node.js code.
 *  [Goal](#goal)
 *  [Glossary](#glossary)
 *  [Getting Started](#getting-started)
+   * [`.authorize(config, projectRoot)`](#authorizeconfig-projectroot)
 *  [Configuration](#configuration)
    * [Suggesting grants](#suggesting-grants)
 *  [Defining a Mintable Type](#defining-a-mintable-type)
