@@ -11,7 +11,7 @@ for (const Type of [ MTA, MTB, MTA ]) {
   try {
     let minter = null
     try {
-      minter = require.keys.unboxStrict(Mintable.minterFor(Type), () => true)
+      minter = require.moduleKeys.unboxStrict(Mintable.minterFor(Type), () => true)
       console.log('Got minter')
     } catch (exc) {
       console.log('Denied access to minter')

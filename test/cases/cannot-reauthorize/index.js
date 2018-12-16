@@ -20,7 +20,7 @@ try {
 function fallback (...atv) {
   // this function body left intentionally blank
 }
-const myMinter = require.keys.unbox(
+const myMinter = require.moduleKeys.unbox(
   Mintable.minterFor(MyMintable),
   () => true,
   fallback)

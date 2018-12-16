@@ -78,7 +78,7 @@ replaceAll(
   0,
   () => {
     try {
-      require.keys.unboxStrict(
+      require.moduleKeys.unboxStrict(
         Mintable.minterFor(MyMintable), () => true)
       console.log('Got My minter')
     } catch (ignored) {

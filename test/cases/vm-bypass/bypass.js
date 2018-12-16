@@ -9,11 +9,11 @@ const script = new vm.Script(
   function main () {
     let myMinter = null
     try {
-      myMinter = require.keys.unboxStrict(
+      myMinter = require.moduleKeys.unboxStrict(
           Mintable.minterFor(MyMintable), () => true)
       console.log('B Got My minter')
     } catch (ignored) {
-      myMinter = require.keys.unbox(
+      myMinter = require.moduleKeys.unbox(
         Mintable.minterFor(MyMintable), () => true,
         // Substitute a factory for non-verifying values
         (...argv) => Object.create(MyMintable))

@@ -13,7 +13,7 @@ Object.defineProperty(
   })
 
 // Make sure we're set up to create things the normal way.
-const minter = require.keys.unboxStrict(
+const minter = require.moduleKeys.unboxStrict(
   Mintable.minterFor(MyMintable), () => true)
 console.log('Got minter')
 

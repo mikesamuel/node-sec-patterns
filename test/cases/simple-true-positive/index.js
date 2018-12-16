@@ -12,7 +12,7 @@ Object.defineProperty(
     writable: false
   })
 
-const minter = require.keys.unbox(Mintable.minterFor(MyMintable), () => true)
+const minter = require.moduleKeys.unbox(Mintable.minterFor(MyMintable), () => true)
 console.log('Got minter')
 
 const instance = minter()

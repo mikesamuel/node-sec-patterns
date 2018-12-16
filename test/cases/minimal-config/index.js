@@ -14,11 +14,11 @@ Object.defineProperty(
 
 let deniedMinter = null
 try {
-  deniedMinter = require.keys.unboxStrict(
+  deniedMinter = require.moduleKeys.unboxStrict(
     Mintable.minterFor(DeniedMintable), () => true)
   console.log('Got Denied minter')
 } catch (ignored) {
-  deniedMinter = require.keys.unbox(
+  deniedMinter = require.moduleKeys.unbox(
     Mintable.minterFor(DeniedMintable), () => true,
     // Substitute a factory for non-verifying values
     (...argv) => Object.create(DeniedMintable))

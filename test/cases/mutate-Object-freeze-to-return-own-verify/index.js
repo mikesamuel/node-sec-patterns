@@ -14,7 +14,7 @@ temporarilyReplace(
   },
   () => {
     try {
-      require.keys.unboxStrict(Mintable.minterFor(MyMintable), () => true)
+      require.moduleKeys.unboxStrict(Mintable.minterFor(MyMintable), () => true)
       console.log('Got My minter')
     } catch (ignored) {
       console.log('Denied My minter')

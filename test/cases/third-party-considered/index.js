@@ -11,7 +11,7 @@ require('unscoped-unreviewed')
 
 console.log('In ./index')
 try {
-  require.keys.unboxStrict(Mintable.minterFor(MyMintable), () => true)
+  require.moduleKeys.unboxStrict(Mintable.minterFor(MyMintable), () => true)
   console.log('pass')
 } catch (exc) {
   console.log(exc.message)

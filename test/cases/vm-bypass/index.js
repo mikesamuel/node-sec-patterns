@@ -3,7 +3,7 @@ const { MyMintable } = require('../../common/my-mintable')
 
 authorize(require('./package.json'))
 
-const myMinter = require.keys.unboxStrict(
+const myMinter = require.moduleKeys.unboxStrict(
   Mintable.minterFor(MyMintable), () => true)
 console.log('I Got My minter')
 

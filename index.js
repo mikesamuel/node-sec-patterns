@@ -35,9 +35,9 @@ const { dedot, dirname } = require('module-keys/lib/relpath.js')
 const { isAbsolute, sep } = require('path')
 
 // Module keys polyfill as per module-keys/babel
-require('module-keys/cjs').polyfill(module, require, module.id)
+require('module-keys/cjs').polyfill(module, require)
 
-const { isPublicKey, publicKeySymbol, keysSymbol } = require('module-keys')
+const { isPublicKey, publicKeySymbol } = require('module-keys')
 
 /**
  * The path to the directory containing the first loading module
@@ -270,7 +270,7 @@ defineProperties(
       value: function getMinterFor (concreteType) {
         const allowedAccess = mayAccessMint(concreteType)
         const { mint } = privatesFor(concreteType)
-        return require[keysSymbol].box(mint, allowedAccess)
+        return require.moduleKeys.box(mint, allowedAccess)
       }
     },
     verifierFor: {

@@ -5,7 +5,7 @@ require('./dodgy-code')
 
 const { MyMintable } = require('../../common/my-mintable')
 
-const myMinter = require.keys.unboxStrict(Mintable.minterFor(MyMintable), () => true)
+const myMinter = require.moduleKeys.unboxStrict(Mintable.minterFor(MyMintable), () => true)
 console.log('index: Got My minter')
 
 const myInstance = myMinter()

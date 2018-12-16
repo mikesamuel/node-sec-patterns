@@ -270,7 +270,7 @@ Instead of using `new` just pass the same arguments to the minter.
 
 ```js
 // The minter may be fetched once.
-const fooMinter = require.keys.unboxStrict(Mintable.minterFor(FooContractType))
+const fooMinter = require.moduleKeys.unboxStrict(Mintable.minterFor(FooContractType))
 
 const newInstance =
   // instead of (new FooContractType(x, y))
@@ -291,7 +291,7 @@ whitelisted it will get a log warning to prompt them to consider
 granting authority to your library.
 
 ```js
-const fooMinter = require.keys.unbox(
+const fooMinter = require.moduleKeys.unbox(
   Mintable.minterFor(FooContractType),
   () => true,
   fallbackValueMaker)
