@@ -37,7 +37,7 @@ const { isAbsolute, sep } = require('path')
 // Module keys polyfill as per module-keys/babel
 require('module-keys/cjs').polyfill(module, require, module.id)
 
-const { isPublicKey, publicKeySymbol } = require('module-keys')
+const { isPublicKey, publicKeySymbol, keysSymbol } = require('module-keys')
 
 /**
  * The path to the directory containing the first loading module
@@ -270,7 +270,7 @@ defineProperties(
       value: function getMinterFor (concreteType) {
         const allowedAccess = mayAccessMint(concreteType)
         const { mint } = privatesFor(concreteType)
-        return require.keys.box(mint, allowedAccess)
+        return require[keysSymbol].box(mint, allowedAccess)
       }
     },
     verifierFor: {
