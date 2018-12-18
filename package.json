@@ -14,7 +14,7 @@
     "index.js"
   ],
   "dependencies": {
-    "module-keys": "^2.0.0"
+    "module-keys": "^2.0.1"
   },
   "scripts": {
     "cover": "istanbul cover _mocha",
